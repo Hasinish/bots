@@ -16,11 +16,14 @@ async def get_ai_reply(prompt: str) -> str:
     if not groq_client:
         return "AI is not configured. Please set GROQ_API_KEY in .env!"
     
-    # 1. Load system prompt from file dynamically
+    # 1. Load system prompt from file dynamically (relative to this script's directory)
     system_instruction = "You are a helpful business assistant."
-    if os.path.exists("system_prompt.txt"):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    prompt_path = os.path.join(base_dir, "system_prompt.txt")
+    
+    if os.path.exists(prompt_path):
         try:
-            with open("system_prompt.txt", "r", encoding="utf-8") as f:
+            with open(prompt_path, "r", encoding="utf-8") as f:
                 system_instruction = f.read()
         except Exception as e:
             print(f"Warning: Could not read system_prompt.txt: {e}")
