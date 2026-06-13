@@ -1,1 +1,4 @@
-# telegram-chatbots
+# bots
+
+> [!IMPORTANT]
+> Always check and adhere to [personality.md](file:///d:/bots/memory/personality.md) for behavior, communication style, and personality guidelines, review [personal_info.md](file:///d:/bots/memory/personal_info.md) for user details and preferences, check [purpose.md](file:///d:/bots/memory/purpose.md) to align with the project's goals, and read [state.md](file:///d:/bots/memory/state.md) to check the active todo and blockers before performing any operations in this workspace. If working on a specific platform, check the corresponding reference in `memory/platforms/` (e.g., [telegram.md](file:///d:/bots/memory/platforms/telegram.md)). Do not read [history.md](file:///d:/bots/memory/history.md) unless explicitly requested by the user. You MUST update [state.md](file:///d:/bots/memory/state.md) and prepend a summary to [history.md](file:///d:/bots/memory/history.md) whenever a major task is completed or when wrapping up the session.

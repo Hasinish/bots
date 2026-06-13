@@ -2,13 +2,34 @@ import os
 from dotenv import load_dotenv
 from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler, ConversationHandler
-
+from groq import Groq
 
 load_dotenv()
 WAITING_NAME, WAITING_EMAIL = range(2)
 
 
 TOKEN = os.getenv("TOKEN")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+# Initialize Groq client
+groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY and GROQ_API_KEY != "your_groq_api_key_here" else None
+
+async def get_ai_reply(prompt: str) -> str:
+    if not groq_client:
+        return "AI is not configured. Please set GROQ_API_KEY in .env!"
+    try:
+        chat_completion = groq_client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                }
+            ],
+            model="llama-3.1-8b-instant",
+        )
+        return chat_completion.choices[0].message.content
+    except Exception as e:
+        return f"Error getting AI reply: {str(e)}"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["name"] = update.effective_user.first_name
@@ -30,14 +51,16 @@ async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.message.text.lower() == "hi" or update.message.text.lower() == "hello!":
+    text = update.message.text
+    if text.lower() == "hi" or text.lower() == "hello!":
         await update.message.reply_text("Hey!")
-    elif update.message.text.lower() == "bye":
+    elif text.lower() == "bye":
         await update.message.reply_text("Goodbye!")
-    elif update.message.text.lower() == "help!":
+    elif text.lower() == "help!":
         await help(update, context)
     else:
-        await update.message.reply_text("I don't understand")
+        reply = await get_ai_reply(text)
+        await update.message.reply_text(reply)
 
 
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
