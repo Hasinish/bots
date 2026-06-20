@@ -20,7 +20,7 @@ A professional-grade Telegram Business Bot template built in Python. This bot he
 ## File Structure
 
 ```
-business_bot/
+standard_business_bot/
 │
 ├── bot.py              # Main Telegram bot configuration and state handlers
 ├── database.py         # SQLite connection, schema creation, and insert helpers
